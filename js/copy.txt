@@ -1,0 +1,42 @@
+		                 <fieldset>
+		                 <legend>Add a Substance</legend>
+		                 <div class="form-group">
+		                 <div class=custom-error ng-show="substanceForm.rank.$error.required">**</div>
+		                   <select ng-model="sub.rank" class="form-control" name="ranks" ng-options="ranks for ranks in [10,9,8,7,6,5,4,3,2,1]" title="ranks" required >
+		                     <option value>Rank The Substance</option>
+		                   </select>
+		                 </div>
+		                 <div class="form-group">
+		                 <div class=custom-error ng-show="substanceForm.name.$error.required">**</div>
+		                   <textarea ng-model="sub.name" name = "Name" class="form-control" placeholder="Write the name of the substance..." title="Name" ng-pattern="/.{5,}/" required></textarea>
+		                   <div class="custom-error" ng-show="substanceForm.name.$error.pattern">Name doesn't respect the pattern.
+                           </div>
+		                 </div>
+						 <div class="form-group">
+		                 <div class=custom-error ng-show="substanceForm.description.$error.required">**</div>
+		                   <textarea ng-model="sub.description" name = "Description" class="form-control" placeholder="Write the description of the substance" title="Description" ng-pattern="/.{5,}/" required></textarea>
+		                   <div class="custom-error" ng-show="substanceForm.description.$error.pattern">Description doesn't respect the pattern.
+                           </div>
+		                 </div>
+						 <div class="form-group">
+		                 <div class=custom-error ng-show="substanceForm.formula.$error.required">**</div>
+		                   <textarea ng-model="sub.formula" name = "Formula" class="form-control" placeholder="Write the substance formula..." title="Formula" ng-pattern="/.{5,}/" required></textarea>
+		                   <div class="custom-error" ng-show="substanceForm.formula.$error.pattern">Formula doesn't respect the pattern.
+                           </div>
+		                 </div>
+		                 <div class="form-group">
+		                 <div class=custom-error ng-show="substanceForm.rarity.$error.required">**</div>
+		                   <select ng-model="sub.rarity" class="form-control" name="rarity" ng-options="rarity for rarity in [10,9,8,7,6,5,4,3,2,1]" title="rarity" required >
+		                     <option value>Set The Rarity</option>
+		                   </select>
+		                 </div>
+						<div class="form-group">
+		                 <div class=custom-error ng-show="substanceForm.hard.$error.required">**</div>
+		                   <textarea ng-model="sub.hard" name = "Absolute" class="form-control" placeholder="Write the substance formula..." title="Absolute" ng-pattern="/^[0-9]*$/" required></textarea>
+		                   <div class="custom-error" ng-show="substanceForm.hard.$error.pattern">Numbers Only.
+                           </div>
+		                 </div>
+		                 <div class="form-group">
+		                   <input type="submit" class="btn btn-primary pull-right" ng-disabled="reviewForm.$invalid" value="Submit Review" >
+		                 </div>
+		                 </fieldset>

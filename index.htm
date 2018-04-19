@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html  lang="en" >
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hardest Substances</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+       <link href="css/substances.css" rel="stylesheet">
+  </head>
+  <body ng-app="Substance" class="list-group" ng-controller="SubController">
+  <div class="container">
+    <header>
+      <h1 class="text-center">Top <span id="num"></span> Hardest Substances on Earth</h1>
+	  
+<span class="input-group-btn">
+<input type="text" class="form-control" placeholder="Search for substance..." ng-model="search_query">
+</span>
+	  
+    </header>
+	
+	
+    <div class="list-group-item" ng-repeat="sub in subs | orderBy:'-rank'| filter:search_query ">
+      <h3>
+        {{sub.name}}
+        <em class="pull-right" id="ranker">{{sub.rank}}</em>
+      </h3>
+      <div ng-show="sub.images.length">
+	   <ul class="list-inline thumbs">
+	      <li class="small-image thumbnail"
+	          ng-repeat="image in sub.images" >
+	               <img ng-src="{{image}}" >
+	       </li>
+	   </ul>
+	  </div>
+      <section ng-controller="TabController">
+	  <ul class="nav nav-pills">
+	  <li ng-class="{active:isSet(1)}"> <a href ng-click="setTab(1)">Description</a> </li>
+	  <li ng-class="{active:isSet(2)}"> <a href ng-click="setTab(2)">Specs</a> </li>
+	  <li ng-class="{active:isSet(3)}"> <a href ng-click="setTab(3)">Opinions</a> </li>
+	  </ul>
+
+        <div ng-show="isSet(1)">
+          <h4>Description</h4>
+          <blockquote> {{sub.description}}</blockquote>
+        </div>
+        <div ng-show="isSet(2)">
+          <h4>Specs</h4>
+          <blockquote>
+          <ul class="list-unstyled">
+			<li><strong>Chemical Formula</strong>: {{sub.formula}}</li>
+			<li><strong>Rarity</strong>: {{sub.rarity}}</li>
+			<li><strong>Absolute Hardness: </strong>{{sub.hard}} </li>
+         </ul>
+         </blockquote>
+        </div>
+
+        <div ng-show="isSet(3)">
+          <h4>Toughts</h4>
+          <ul>
+
+		  	<li class="list-unstyled" ng-repeat = "review in sub.reviews">
+		  		<blockquote>
+                     {{review.body}}
+		  			<br><cite>-{{review.author}}</cite>
+		  		</blockquote>
+		  	</li>
+           </ul>
+  <form name="reviewForm" ng-submit="addReview(rev)">
+     <blockquote >
+	  	  	{{rev.body}}
+	  	    <br><cite>&#9472;{{rev.author}}</cite>
+	 </blockquote>
+		                 <fieldset>
+		                 <legend>Write your opinion</legend>
+		                 <div class="form-group">
+		                 <div class=custom-error ng-show="reviewForm.body.$error.required">**</div>
+		                   <textarea ng-model="rev.body" name = "body" class="form-control" placeholder="Say what you think..." title="Review" ng-pattern="/.{5,}/" required></textarea>
+		                   <div class="custom-error" ng-show="reviewForm.body.$error.pattern">Body doesn't respect the pattern.
+                           </div>
+		                 </div>
+		                 <div class="form-group">
+		                 <div class=custom-error ng-show="reviewForm.author.$error.required">**</div>
+		                   <input ng-model="rev.author" type="email" name = "author" class="form-control" placeholder="pegazo07@interia.pl" title="Email"  ng-pattern="/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/" required>
+		                   <div class="custom-error" ng-show="reviewForm.author.$error.pattern">Email Address doesn't respect the pattern.
+                           </div>
+                        </div>
+		                 <div class="form-group">
+		                   <input type="submit" class="btn btn-primary pull-right" ng-disabled="reviewForm.$invalid" value="Submit Review" >
+		                 </div>
+		                 </fieldset>
+           </form>
+
+</div>
+</section>
+
+</div>
+<a href="" class="add-form" id="<?php $v['CommentID'] ?>"> 
+<button class="btn btn-blue">Add Substance</button></a>
+   <div class="add-sub-form"> <form name="addSubstance" ng-submit="insertSubstance(sub)">
+	  		              <fieldset>
+		                 <legend>Add a Substance</legend>
+		                 <div class="form-group">
+		                 <div class=custom-error ng-show="addSubstance.name.$error.required">**</div>
+		                   <textarea ng-model="sub.name" name = "Name" class="form-control" placeholder="Write the Name of the Substance...." title="Name" ng-pattern="/.{5,}/" required></textarea>
+		                   <div class="custom-error" ng-show="addSubstance.name.$error.pattern">Invalid Name.
+                           </div>
+		                 </div>
+						 <div class="form-group">
+		                   <input ng-model="sub.rank" id="rankingsys" class="form-control" name="rank" type="number"  title="Rank" placeholder="Rank The Substance" min="1">
+		                   </input>
+		                 </div>
+                        <div class="form-group">
+						 <div class=custom-error ng-show="addSubstance.description.$error.required">**</div>
+		                   <textarea ng-model="sub.description" name = "Description" class="form-control" placeholder="Write the Description of the Substance..." title="Description" ng-pattern="/.{5,}/" required></textarea>
+		                   <div class="custom-error" ng-show="addSubstance.description.$error.pattern">Invalid Description.
+		                 </div>
+						 </div>
+						<div class="form-group">
+						 <div class=custom-error ng-show="addSubstance.formula.$error.required">**</div>
+		                   <textarea ng-model="sub.formula" name = "Formula" class="form-control" placeholder="Write the Formula..." title="Formula" ng-pattern="/.{5,}/" required></textarea>
+		                   <div class="custom-error" ng-show="addSubstance.formula.$error.pattern">Invalid Formula.
+						 </div>
+						 </div>
+						 <div class="form-group">
+		                 <div class=custom-error ng-show="addSubstance.rarity.$error.required">**</div>
+		                   <select ng-model="sub.rarity" class="form-control" name="rarity" ng-options="rarity for rarity in [10,9,8,7,6,5,4,3,2,1]" title="Rarity" required >
+		                     <option value>Set the Rarity</option>
+		                   </select>
+		                 </div>
+						 <div class="form-group">
+						 <div class=custom-error ng-show="addSubstance.hard.$error.required">**</div>
+		                   <textarea ng-model="sub.hard" name = "Absolute" class="form-control" placeholder="Write the Absolute Hardness Value" title="Absolute" ng-pattern="/^[0-9]*$/" required></textarea>
+		                   <div class="custom-error" ng-show="addSubstance.hard.$error.pattern">Numbers Only.
+						 </div>
+						 </div>
+						<h5><b>Image Upload Instructions:</b>
+						<ol>
+                        <li>-Save the images into the substance/images Folder</li>			
+						<li>-The image must be a jpg file</li>
+						<li>-Name the images by a number with a prefix fot_ <br>
+						    -Example: fot_1 would be the first image </li>
+					   <li>In the areas below refer to the number of the image 
+					     <br>-Example: if you called an image fot_5 just input number 5 below</li>
+						 </ol>
+                        <div class="form-group">
+						<input id="img1" type="number" placeholder="Your Image number">
+						 </input>
+		                 </div>
+						 
+						<div class="form-group">
+						<input id="img2" type="number" placeholder="Your Image number">
+						 </input>
+		                 </div>
+						 
+						<div class="form-group">
+						<input id="img3" type="number" placeholder="Your Image number">
+						 </input>
+		                 </div>
+		 
+
+		                 <div class="form-group">
+		                   <input type="submit" id="submiter" class="btn btn-primary pull-right" ng-disabled="addSubstance.$invalid" value="Submit Substance" >
+		                 </div>
+		                 </fieldset>
+           </form>
+		   </div>
+	  
+	  
+	  
+	  
+</div>
+</div>
+<script src="js/jquery-3.1.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/angular.min.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
+</body>
+</html>
